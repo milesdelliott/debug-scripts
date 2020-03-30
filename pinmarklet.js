@@ -1,7 +1,7 @@
 ! function() {
     "use strict";
-    console.log('N',N);
     function pinterestLog(data) {
+        console.log('N',N);
         console.log(data);
         N.v.config.debug && N.w.console && (N.w.console.log ? console.log(data) : N.w.console.table && N.w.console.table(data))
     }
