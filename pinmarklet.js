@@ -188,8 +188,8 @@
             d = void 0,
             e = void 0,
             f = "?";
+            console.log('mtstuff', b, N);
         N.v.doNotCall || (N.v.count.apiCalls = N.v.count.apiCalls + 1, c = N.f.callback.length, e = N.a.k + ".f.callback[" + c + "]", N.f.callback[c] = function(a) {
-            console.log([a,e,d], N);
             N.v.count.apiCalls = N.v.count.apiCalls - 1, b.func(a, c);
             var d = N.d.getElementById(e);
             d.parentNode.removeChild(d)
