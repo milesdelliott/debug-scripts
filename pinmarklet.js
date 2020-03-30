@@ -1,9 +1,5 @@
 ! function() {
     "use strict";
-    function pinterestLog(data) {
-        console.log(data);
-        globalData.pinterestSettings.config.debug && globalData.Window.console && (globalData.Window.console.log ? console.log(data) : globalData.Window.console.table && globalData.Window.console.table(data))
-    }
 
     function b(b) {
         var c = {
@@ -67,7 +63,7 @@
                 return c
             }
         };
-        return globalData.pinterestSettings.sha || (pinterestLog("setting up hash repo"), globalData.pinterestSettings.sha = {}), globalData.pinterestSettings.sha[b.str] || (globalData.pinterestSettings.sha[b.str] = c.rstr2hex(c.rstr_sha1(b.str))), globalData.pinterestSettings.sha[b.str]
+        return globalData.pinterestSettings.sha || (console.log("setting up hash repo"), globalData.pinterestSettings.sha = {}), globalData.pinterestSettings.sha[b.str] || (globalData.pinterestSettings.sha[b.str] = c.rstr2hex(c.rstr_sha1(b.str))), globalData.pinterestSettings.sha[b.str]
     }
 
     function c(b) {
@@ -77,7 +73,7 @@
         for (c in b) "extras" !== c && (d = d + "&pm" + c.charAt(0).toUpperCase() + c.slice(1) + "=" + encodeURIComponent(b[c]));
         if (b.extras)
             for (c in b.extras) b.extras[c] && b.extras[c].hasOwnProperty && (d = d + "&" + c + "=" + b.extras[c]);
-        (new Image).src = globalData.otherSettings.log + d, pinterestLog("Logging: " + d)
+        (new Image).src = globalData.otherSettings.log + d, console.log("Logging: " + d)
     }
 
     function d(a) {
@@ -136,7 +132,7 @@
     }
 
     function getImage(c) {
-        pinterestLog('getting image')
+        console.log('getting image')
         var e = void 0,
             f = void 0,
             g = void 0;
@@ -173,7 +169,7 @@
                 else {
                     j.height > globalData.otherSettings.thumbSize && j.width > globalData.otherSettings.thumbSize && (globalData.pinterestSettings.override.imageless = !0), c.mod && (globalData.pinterestSettings.data.img[g].mod = c.mod);
                     for (d in j) j[d] && (globalData.pinterestSettings.data.img[g][d] = j[d]);
-                    c.src === globalData.pinterestSettings.here && (d.description = "", globalData.pinterestSettings.override.imageless = !0), c.update ? (pinterestLog("Image source changed from " + c.update + " to " + c.src), f = b({
+                    c.src === globalData.pinterestSettings.here && (d.description = "", globalData.pinterestSettings.override.imageless = !0), c.update ? (console.log("Image source changed from " + c.update + " to " + c.src), f = b({
                         str: c.update
                     }), globalData.pinterestSettings.data.img[f] = globalData.pinterestSettings.data.img[g], c.mod && (globalData.pinterestSettings.data.img[f].mod = c.mod), globalData.pinterestSettings.data.img[f].src = c.src, globalData.pinterestSettings.data.img[f].height = j.height, globalData.pinterestSettings.data.img[f].width = j.width, globalData.pinterestSettings.data.img[g] = globalData.pinterestSettings.data.img[f], globalData.pinterestSettings.data.img[g].status = "ok", delete globalData.pinterestSettings.data.img[f]) : globalData.pinterestSettings.data.img[g].status = "ok"
                 }
@@ -192,7 +188,7 @@
             globalData.pinterestSettings.count.apiCalls = globalData.pinterestSettings.count.apiCalls - 1, b.func(a, c);
             var d = globalData.document.getElementById(e);
             d.parentNode.removeChild(d)
-        }, b.url.match(/\?/) && (f = "&"), d = globalData.document.createElement("SCRIPT"), d.id = e, d.type = "text/javascript", d.charset = "utf-8", d.src = b.url + f + "callback=" + e, globalData.document.body.appendChild(d), pinterestLog("Calling: " + d.src))
+        }, b.url.match(/\?/) && (f = "&"), d = globalData.document.createElement("SCRIPT"), d.id = e, d.type = "text/javascript", d.charset = "utf-8", d.src = b.url + f + "callback=" + e, globalData.document.body.appendChild(d), console.log("Calling: " + d.src))
     }
 
     function l() {
@@ -204,7 +200,7 @@
         for (b = globalData.document.getElementsByTagName("IFRAME"), c = 0; c < b.length; c += 1)
             if (!b[c].getAttribute("nopin") && !b[c].getAttribute("data-pin-nopin") && (d = b[c].getAttribute("src"), d && d.match(/^(https?:|)\/\//))) {
                 if (d = d.split("#")[0].split("?")[0], d.match(globalData.otherSettings.pattern.iframe.youtube)) {
-                    e = d.split("/"), e[4] && (pinterestLog("found a YouTube player: " + b[c].src), getImage({
+                    e = d.split("/"), e[4] && (console.log("found a YouTube player: " + b[c].src), getImage({
                         src: "https://img.youtube.com/vi/" + e[4] + "/hqdefault.jpg",
                         mod: {
                             multimedia: !0,
@@ -215,7 +211,7 @@
                     continue
                 }
                 if (d.match(globalData.otherSettings.pattern.iframe.instagram)) {
-                    e = d.split("/"), e[4] && (pinterestLog("found an Instagram embed: " + b[c].src), getImage({
+                    e = d.split("/"), e[4] && (console.log("found an Instagram embed: " + b[c].src), getImage({
                         src: "https://instagram.com/p/" + e[4] + "/media/?size=l",
                         mod: {
                             url: "https://www.instagram.com/p/" + e[4] + "/",
@@ -241,7 +237,7 @@
                     continue
                 }
             }
-        pinterestLog(globalData.pinterestSettings.data.iframe)
+        console.log(globalData.pinterestSettings.data.iframe)
     }
 
     function m() {
@@ -283,7 +279,7 @@
             };
         if (f = globalData.document.querySelectorAll("[data-pin-me-only]"), 1 === f.length) h(f[0]);
         else
-            for (globalData.pinterestSettings.override.og ? pinterestLog("og overridden") : globalData.pinterestSettings.data.meta.og && (d = {}, pinterestLog("og found"), globalData.pinterestSettings.data.meta.og.image && ("string" === typeof globalData.pinterestSettings.data.meta.og.image ? (pinterestLog("og:image found"), d.ogMedia = globalData.pinterestSettings.data.meta.og.image) : (globalData.pinterestSettings.data.meta.og.image[0] ? (pinterestLog("og:image array found; using the first element"), q = globalData.pinterestSettings.data.meta.og.image[0]) : q = globalData.pinterestSettings.data.meta.og.image, "string" === typeof q ? (pinterestLog("og:image found in object"), d.ogMedia = q) : q.secure_url && "string" === typeof q.secure_url ? (pinterestLog("og:secure_url found"), d.ogMedia = q.secure_url) : q["~"] && "string" === typeof q["~"] && (pinterestLog("og:~ found"), d.ogMedia = q["~"])), globalData.pinterestSettings.data.meta.og.url && ("string" === typeof globalData.pinterestSettings.data.meta.og.url ? d.ogUrl = globalData.pinterestSettings.data.meta.og.url : (pinterestLog("More than one og:url found"), d.ogUrl = globalData.pinterestSettings.data.meta.og.url[0]), pinterestLog("og:url found")), globalData.pinterestSettings.data.meta.og.site_name && ("string" === typeof globalData.pinterestSettings.data.meta.og.site_name ? globalData.pinterestSettings.ogSiteName = globalData.pinterestSettings.data.meta.og.site_name : (pinterestLog("More than one og:site_name found"), globalData.pinterestSettings.ogSiteName = globalData.pinterestSettings.data.meta.og.site_name[0])), (globalData.pinterestSettings.data.meta.og.description || globalData.pinterestSettings.data.meta.og.title) && (pinterestLog("og:title or og:description found"), d.ogDescription = globalData.pinterestSettings.data.meta.og.description || globalData.pinterestSettings.data.meta.og.title, "string" === typeof d.ogDescription ? globalData.pinterestSettings.ogDescription = d.ogDescription : (pinterestLog("More than one og:description found"), globalData.pinterestSettings.ogDescription = d.ogDescription[0])), pinterestLog("loading og:image"), getImage({
+            for (globalData.pinterestSettings.override.og ? console.log("og overridden") : globalData.pinterestSettings.data.meta.og && (d = {}, console.log("og found"), globalData.pinterestSettings.data.meta.og.image && ("string" === typeof globalData.pinterestSettings.data.meta.og.image ? (console.log("og:image found"), d.ogMedia = globalData.pinterestSettings.data.meta.og.image) : (globalData.pinterestSettings.data.meta.og.image[0] ? (console.log("og:image array found; using the first element"), q = globalData.pinterestSettings.data.meta.og.image[0]) : q = globalData.pinterestSettings.data.meta.og.image, "string" === typeof q ? (console.log("og:image found in object"), d.ogMedia = q) : q.secure_url && "string" === typeof q.secure_url ? (console.log("og:secure_url found"), d.ogMedia = q.secure_url) : q["~"] && "string" === typeof q["~"] && (console.log("og:~ found"), d.ogMedia = q["~"])), globalData.pinterestSettings.data.meta.og.url && ("string" === typeof globalData.pinterestSettings.data.meta.og.url ? d.ogUrl = globalData.pinterestSettings.data.meta.og.url : (console.log("More than one og:url found"), d.ogUrl = globalData.pinterestSettings.data.meta.og.url[0]), console.log("og:url found")), globalData.pinterestSettings.data.meta.og.site_name && ("string" === typeof globalData.pinterestSettings.data.meta.og.site_name ? globalData.pinterestSettings.ogSiteName = globalData.pinterestSettings.data.meta.og.site_name : (console.log("More than one og:site_name found"), globalData.pinterestSettings.ogSiteName = globalData.pinterestSettings.data.meta.og.site_name[0])), (globalData.pinterestSettings.data.meta.og.description || globalData.pinterestSettings.data.meta.og.title) && (console.log("og:title or og:description found"), d.ogDescription = globalData.pinterestSettings.data.meta.og.description || globalData.pinterestSettings.data.meta.og.title, "string" === typeof d.ogDescription ? globalData.pinterestSettings.ogDescription = d.ogDescription : (console.log("More than one og:description found"), globalData.pinterestSettings.ogDescription = d.ogDescription[0])), console.log("loading og:image"), getImage({
                     src: d.ogMedia,
                     mod: d
                 }))), c = globalData.document.getElementsByTagName("IMG"), b = 0; b < c.length; b += 1) h(c[b])
@@ -330,7 +326,7 @@
         if (b = function(a, c, d) {
                 for (var e in a) "object" === O(a[e]) ? "string" === typeof a[e][0] ? c[d] = a[e] : b(a[e], a, e) : 1 === Object.keys(a).length && (c[d] = a[e]);
                 return a
-            }, globalData.pinterestSettings.data.meta = b(e, null, null), c = {}, pinterestLog("meta data found"), pinterestLog(globalData.pinterestSettings.data.meta), globalData.pinterestSettings.data.meta.pin && (pinterestLog("data-pin found"), globalData.pinterestSettings.data.meta.pin.url && (pinterestLog("data-pin-url found"), c.pinUrl = globalData.pinterestSettings.data.meta.pin.url, globalData.pinterestSettings.override.link = !0), globalData.pinterestSettings.data.meta.pin.description && (pinterestLog("data-pin-description found"), c.pinDescription = globalData.pinterestSettings.data.meta.pin.description), globalData.pinterestSettings.data.meta.pin.title && (pinterestLog("data-pin-title found"), c.pinTitle = globalData.pinterestSettings.data.meta.pin.title), globalData.pinterestSettings.data.meta.pin.id && (pinterestLog("data-pin-id found"), c.pinId = globalData.pinterestSettings.data.meta.pin.id, globalData.pinterestSettings.override.imageless = !0), globalData.pinterestSettings.data.meta.pin.media && (pinterestLog("data-pin-media found"), c.pinMedia = globalData.pinterestSettings.data.meta.pin.media, pinterestLog("loading data-pin-media"), getImage({
+            }, globalData.pinterestSettings.data.meta = b(e, null, null), c = {}, console.log("meta data found"), console.log(globalData.pinterestSettings.data.meta), globalData.pinterestSettings.data.meta.pin && (console.log("data-pin found"), globalData.pinterestSettings.data.meta.pin.url && (console.log("data-pin-url found"), c.pinUrl = globalData.pinterestSettings.data.meta.pin.url, globalData.pinterestSettings.override.link = !0), globalData.pinterestSettings.data.meta.pin.description && (console.log("data-pin-description found"), c.pinDescription = globalData.pinterestSettings.data.meta.pin.description), globalData.pinterestSettings.data.meta.pin.title && (console.log("data-pin-title found"), c.pinTitle = globalData.pinterestSettings.data.meta.pin.title), globalData.pinterestSettings.data.meta.pin.id && (console.log("data-pin-id found"), c.pinId = globalData.pinterestSettings.data.meta.pin.id, globalData.pinterestSettings.override.imageless = !0), globalData.pinterestSettings.data.meta.pin.media && (console.log("data-pin-media found"), c.pinMedia = globalData.pinterestSettings.data.meta.pin.media, console.log("loading data-pin-media"), getImage({
                 src: globalData.pinterestSettings.data.meta.pin.media,
                 mod: c
             }))), globalData.pinterestSettings.data.meta.instapp && globalData.pinterestSettings.data.meta.instapp.owner_user_id && globalData.pinterestSettings.data.meta.al && globalData.pinterestSettings.data.meta.al.ios && globalData.pinterestSettings.data.meta.al.ios.url && globalData.pinterestSettings.data.meta.al.ios.url.match("=") && (globalData.pinterestSettings.insta = {
@@ -348,7 +344,7 @@
             if (b[c].type && "application/ld+json" === b[c].type && b[c].innerText) try {
                 globalData.pinterestSettings.data.script.push(JSON.parse(b[c].innerText))
             } catch (e) {
-                pinterestLog("Could not parse linked data."), pinterestLog(b[c].innerText)
+                console.log("Could not parse linked data."), console.log(b[c].innerText)
             }
     }
 
@@ -388,10 +384,10 @@
                     description: g(d)
                 }
             }), c = !0))), !c && globalData.pinterestSettings.here.match(globalData.otherSettings.pattern.page.instagramPage)) {
-            pinterestLog("On an Instagram property");
+            console.log("On an Instagram property");
             var r = globalData.document.title;
             if (globalData.pinterestSettings.data.meta.og && globalData.pinterestSettings.data.meta.og.title && (r = globalData.pinterestSettings.data.meta.og.title.split("Instagram: “"), r = r[1] ? r[1].substring(0, r[1].length - 1).trim() : globalData.document.title), globalData.pinterestSettings.here.match(globalData.otherSettings.pattern.page.instagramPhoto)) {
-                pinterestLog("On an Instagram photo URL");
+                console.log("On an Instagram photo URL");
                 var s = function(a) {
                         if (e = a.getElementsByTagName("IMG"), e.length)
                             for (b = 0; b < e.length; b += 1) getImage({
@@ -404,12 +400,12 @@
                             }), c = !0
                     },
                     t = globalData.document.getElementsByTagName("ARTICLE");
-                if (2 === t.length && (pinterestLog("in main carousel"), s(t[1]), pinterestLog(c ? "Found image in carousel." : "Found carousel but no image.")), !c) {
+                if (2 === t.length && (console.log("in main carousel"), s(t[1]), console.log(c ? "Found image in carousel." : "Found carousel but no image.")), !c) {
                     var u = globalData.document.querySelectorAll("[role=button]");
-                    u.length && (s(u[1]), pinterestLog(c ? "Found image in button." : "Found button but no image."))
+                    u.length && (s(u[1]), console.log(c ? "Found image in button." : "Found button but no image."))
                 }
             } else
-                for (pinterestLog("On a non-photo Instagram page"), b = globalData.document.getElementsByTagName("IMG"), f = 0; f < b.length; f += 1) b[f].currentSrc && (e = b[f].parentNode.parentNode.parentNode, "A" === e.tagName && e.href && e.href.match(/^https?:\/\//) && getImage({
+                for (console.log("On a non-photo Instagram page"), b = globalData.document.getElementsByTagName("IMG"), f = 0; f < b.length; f += 1) b[f].currentSrc && (e = b[f].parentNode.parentNode.parentNode, "A" === e.tagName && e.href && e.href.match(/^https?:\/\//) && getImage({
                     src: b[f].currentSrc,
                     override: ["imageless"],
                     mod: {
@@ -418,7 +414,7 @@
                     }
                 }))
         }
-        if (!c && globalData.pinterestSettings.here.match(globalData.otherSettings.pattern.page.youtubeWatch) && (d = globalData.pinterestSettings.here.split("v=")[1].split("&")[0].split("#")[0], d && (pinterestLog("found a YouTube page: " + globalData.pinterestSettings.here), getImage({
+        if (!c && globalData.pinterestSettings.here.match(globalData.otherSettings.pattern.page.youtubeWatch) && (d = globalData.pinterestSettings.here.split("v=")[1].split("&")[0].split("#")[0], d && (console.log("found a YouTube page: " + globalData.pinterestSettings.here), getImage({
                 src: "https://img.youtube.com/vi/" + d + "/hqdefault.jpg",
                 override: ["imageless"],
                 mod: {
@@ -427,7 +423,7 @@
                     url: "https://www.youtube.com/watch?v=" + d
                 }
             }), c = !0)), !c && globalData.pinterestSettings.here.match(globalData.otherSettings.pattern.page.youtubeMobile))
-            for (b = globalData.document.getElementsByTagName("A"), f = 0; f < b.length; f += 1) b[f].href && b[f].href.match(globalData.otherSettings.pattern.link.youtubeWatch) && (d = b[f].href.split("v=")[1].split("&")[0].split("#")[0], d && (pinterestLog("found a YouTube video: " + b[f].href), getImage({
+            for (b = globalData.document.getElementsByTagName("A"), f = 0; f < b.length; f += 1) b[f].href && b[f].href.match(globalData.otherSettings.pattern.link.youtubeWatch) && (d = b[f].href.split("v=")[1].split("&")[0].split("#")[0], d && (console.log("found a YouTube video: " + b[f].href), getImage({
                 src: "https://img.youtube.com/vi/" + d + "/hqdefault.jpg",
                 override: ["imageless"],
                 mod: {
@@ -442,12 +438,12 @@
                 if (n = "", o = "", d = b.href.split("imgrefurl="), d[1]) try {
                     n = decodeURIComponent(d[1].split("&")[0])
                 } catch (e) {
-                    pinterestLog("Could not run decodeURIComponent on " + d[1])
+                    console.log("Could not run decodeURIComponent on " + d[1])
                 }
                 if (d = b.href.split("imgurl="), d[1]) try {
                     o = decodeURIComponent(d[1].split("&")[0])
                 } catch (e) {
-                    pinterestLog("Could not run decodeURIComponent on " + d[1])
+                    console.log("Could not run decodeURIComponent on " + d[1])
                 }
                 if (n && o) {
                     if (i = {
@@ -458,7 +454,7 @@
                         }, d = b.parentNode.getElementsByTagName("DIV"), d[2] && d[2].textContent) try {
                         m = JSON.parse(d[2].textContent), "object" === ("undefined" === typeof m ? "undefined" : O(m)) && (m.s || m.pt) && (i.mod.description = m.s || m.pt)
                     } catch (e) {
-                        i.mod.description = d[2].textContent, pinterestLog("Could not run JSON.parse on " + d[2].textContent)
+                        i.mod.description = d[2].textContent, console.log("Could not run JSON.parse on " + d[2].textContent)
                     }
                     getImage(i), c = !0
                 }
@@ -477,7 +473,7 @@
             globalData.Window.JavaScriptInterface.onPinsLoaded(JSON.stringify({
                 pinmarkletClosedReason: globalData.pinterestSettings.data.close
             }))
-        }, pinterestLog("Android app found"), globalData.pinterestSettings.extended = !0)
+        }, console.log("Android app found"), globalData.pinterestSettings.extended = !0)
     }
 
     function checkForAdvancedBrowser() {
@@ -498,7 +494,7 @@
                     to: "background",
                     act: "closeGrid"
                 })
-            }, pinterestLog("advanced browser extension found"), globalData.pinterestSettings.extended = !0, globalData.pinterestSettings.doNotCall = !0)
+            }, console.log("advanced browser extension found"), globalData.pinterestSettings.extended = !0, globalData.pinterestSettings.doNotCall = !0)
         }
     }
 
@@ -509,7 +505,7 @@
             globalData.Window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage({
                 pinmarkletClosedReason: globalData.pinterestSettings.data.close
             })
-        }, pinterestLog("IOS app found"), globalData.pinterestSettings.extended = !0)
+        }, console.log("IOS app found"), globalData.pinterestSettings.extended = !0)
     }
 
     function v() {
@@ -568,12 +564,12 @@
             g = void 0,
             h = void 0,
             i = void 0;
-        globalData.pinterestSettings.defaultBodyOverflow = "", "visible" === globalData.pinterestSettings.defaultBodyOverflow && (globalData.pinterestSettings.defaultBodyOverflow = ""), globalData.document.body.style.overflow = "hidden", pinterestLog("popping the unauthed grid"), globalData.pinterestSettings.data.config = globalData.pinterestSettings.config, globalData.pinterestSettings.data.hazExtension = getElementAttribute(globalData.document.body, "data-pinterest-extension-installed"), b = JSON.stringify(globalData.pinterestSettings.data), globalData.s.grid = globalData.document.createElement("IFRAME"), globalData.s.grid.id = globalData.otherSettings.k + "_grid", globalData.s.grid.src = globalData.otherSettings.grid, globalData.s.grid.frameBorder = "0";
+        globalData.pinterestSettings.defaultBodyOverflow = "", "visible" === globalData.pinterestSettings.defaultBodyOverflow && (globalData.pinterestSettings.defaultBodyOverflow = ""), globalData.document.body.style.overflow = "hidden", console.log("popping the unauthed grid"), globalData.pinterestSettings.data.config = globalData.pinterestSettings.config, globalData.pinterestSettings.data.hazExtension = getElementAttribute(globalData.document.body, "data-pinterest-extension-installed"), b = JSON.stringify(globalData.pinterestSettings.data), globalData.s.grid = globalData.document.createElement("IFRAME"), globalData.s.grid.id = globalData.otherSettings.k + "_grid", globalData.s.grid.src = globalData.otherSettings.grid, globalData.s.grid.frameBorder = "0";
         for (d in globalData.otherSettings.iframeStyle) globalData.otherSettings.iframeStyle[d].hasOwnProperty && (globalData.s.grid.style[d] = globalData.otherSettings.iframeStyle[d]);
         g = function() {
             globalData.document.body.style.overflow = globalData.pinterestSettings.defaultBodyOverflow, globalData.document.body.removeAttribute(globalData.otherSettings.hazPinningNow), globalData.s.grid && globalData.s.grid.parentNode && globalData.s.grid.parentNode === globalData.document.body && globalData.document.body.removeChild(globalData.s.grid)
         }, h = (new Date).getTime(), globalData.s.grid.onload = function() {
-            i = (new Date).getTime() - h, pinterestLog("Grid render time: " + i), c({
+            i = (new Date).getTime() - h, console.log("Grid render time: " + i), c({
                 reason: "grid_rendered",
                 time: i
             }), globalData.pinterestSettings.receiver = globalData.s.grid.contentWindow, globalData.pinterestSettings.receiver.postMessage(b, globalData.s.grid.src), globalData.Window.addEventListener("message", function(a) {
@@ -587,11 +583,11 @@
     }
 
     function x() {
-        pinterestLog(globalData.pinterestSettings.data), c({
+        console.log(globalData.pinterestSettings.data), c({
             reason: "scan_complete",
             time: (new Date).getTime() - globalData.pinterestSettings.time.start,
             url: globalData.document.URL
-        }), globalData.pinterestSettings.data.close ? e() : globalData.pinterestSettings.config.share ? (pinterestLog("sending results to IOS share extension"), globalData.document.body.setAttribute(globalData.pinterestSettings.config.share, JSON.stringify(globalData.pinterestSettings.data))) : "function" === typeof globalData.Window[globalData.pinterestSettings.config.render] ? (pinterestLog("sending results to " + globalData.pinterestSettings.config.render), globalData.Window[globalData.pinterestSettings.config.render](globalData.pinterestSettings.data)) : (pinterestLog("sending results to our default iframe grid overlay"), w())
+        }), globalData.pinterestSettings.data.close ? e() : globalData.pinterestSettings.config.share ? (console.log("sending results to IOS share extension"), globalData.document.body.setAttribute(globalData.pinterestSettings.config.share, JSON.stringify(globalData.pinterestSettings.data))) : "function" === typeof globalData.Window[globalData.pinterestSettings.config.render] ? (console.log("sending results to " + globalData.pinterestSettings.config.render), globalData.Window[globalData.pinterestSettings.config.render](globalData.pinterestSettings.data)) : (console.log("sending results to our default iframe grid overlay"), w())
     }
 
     function y() {
@@ -615,7 +611,7 @@
             return a.score > j[0].score / globalData.otherSettings.quality
         }), globalData.pinterestSettings.data.thumb = j;
         var m = function(b, c) {
-            globalData.pinterestSettings.data.rich || (globalData.pinterestSettings.data.rich = {}), globalData.pinterestSettings.data.rich[b] ? pinterestLog("Ignoring duplicate rich data: " + b + " " + c) : (pinterestLog("Adding rich data: " + b + " " + c), globalData.pinterestSettings.data.rich[b] = c)
+            globalData.pinterestSettings.data.rich || (globalData.pinterestSettings.data.rich = {}), globalData.pinterestSettings.data.rich[b] ? console.log("Ignoring duplicate rich data: " + b + " " + c) : (console.log("Adding rich data: " + b + " " + c), globalData.pinterestSettings.data.rich[b] = c)
         };
         if (globalData.pinterestSettings.data.meta && (globalData.pinterestSettings.data.meta.pin && (globalData.pinterestSettings.data.meta.pin.title && m("title", globalData.pinterestSettings.data.meta.pin.title), globalData.pinterestSettings.data.meta.pin.description && m("description", globalData.pinterestSettings.data.meta.pin.description), globalData.pinterestSettings.data.meta.pin.url && m("url", globalData.pinterestSettings.data.meta.pin.url)), globalData.pinterestSettings.data.meta.og && (globalData.pinterestSettings.data.meta.og.title && m("title", globalData.pinterestSettings.data.meta.og.title), globalData.pinterestSettings.data.meta.og.description && m("description", globalData.pinterestSettings.data.meta.og.description), globalData.pinterestSettings.data.meta.og.url && m("url", globalData.pinterestSettings.data.meta.og.url)), globalData.pinterestSettings.data.meta.description && "string" === typeof globalData.pinterestSettings.data.meta.description && m("description", globalData.pinterestSettings.data.meta.description)), document.title && "string" === typeof document.title && m("title", document.title), globalData.pinterestSettings.data.link && globalData.pinterestSettings.data.link.canonical && m("url", globalData.pinterestSettings.data.link.canonical), globalData.pinterestSettings.insta) {
             for (b = 0, d = globalData.pinterestSettings.data.script.length; b < d; b += 1) globalData.pinterestSettings.data.script[b].author && globalData.pinterestSettings.data.script[b].author.alternateName && (globalData.pinterestSettings.insta.username = globalData.pinterestSettings.data.script[b].author.alternateName);
@@ -664,7 +660,7 @@
     function C() {
         var b = void 0,
             f = void 0;
-        pinterestLog("My key: " + globalData.otherSettings.k), globalData.document.body.getAttribute(globalData.otherSettings.hazPinningNow) || (globalData.Window.navigator.userAgent.match(" MSIE ") ? c({
+        console.log("My key: " + globalData.otherSettings.k), globalData.document.body.getAttribute(globalData.otherSettings.hazPinningNow) || (globalData.Window.navigator.userAgent.match(" MSIE ") ? c({
             reason: "oldIE"
         }) : (B(), globalData.pinterestSettings.config.here ? globalData.pinterestSettings.here = globalData.pinterestSettings.config.here : globalData.pinterestSettings.here = globalData.document.URL, c({
             reason: "init"
@@ -674,8 +670,8 @@
             reason: "domain_not_allowed"
         }), globalData.pinterestSettings.data.close = globalData.pinterestSettings.config.msg.noPinDomain, e()) : (getJSONLD(), b = getMeta(), b ? (c({
             reason: "found_nopin_meta"
-        }), b === !0 ? globalData.pinterestSettings.data.close = globalData.pinterestSettings.config.msg.noPinMeta : globalData.pinterestSettings.data.close = b, e()) : (pinterestLog("Initing"), globalData.s = {}, globalData.pinterestSettings.data.url = globalData.pinterestSettings.here, r() || (l(), globalData.pinterestSettings.override.img || m(), globalData.pinterestSettings.override.link || getCanonicalLink()), f = function() {
-            globalData.pinterestSettings.count.imgLoading || globalData.pinterestSettings.count.apiCalls ? (pinterestLog("images left to load: " + globalData.pinterestSettings.count.imgLoading), pinterestLog("api calls outstanding: " + globalData.pinterestSettings.count.apiCalls), (new Date).getTime() < globalData.pinterestSettings.time.start + globalData.otherSettings.maxWait ? globalData.Window.setTimeout(f, 10) : (pinterestLog("Timed out, rendering what we have."), y())) : y()
+        }), b === !0 ? globalData.pinterestSettings.data.close = globalData.pinterestSettings.config.msg.noPinMeta : globalData.pinterestSettings.data.close = b, e()) : (console.log("Initing"), globalData.s = {}, globalData.pinterestSettings.data.url = globalData.pinterestSettings.here, r() || (l(), globalData.pinterestSettings.override.img || m(), globalData.pinterestSettings.override.link || getCanonicalLink()), f = function() {
+            globalData.pinterestSettings.count.imgLoading || globalData.pinterestSettings.count.apiCalls ? (console.log("images left to load: " + globalData.pinterestSettings.count.imgLoading), console.log("api calls outstanding: " + globalData.pinterestSettings.count.apiCalls), (new Date).getTime() < globalData.pinterestSettings.time.start + globalData.otherSettings.maxWait ? globalData.Window.setTimeout(f, 10) : (console.log("Timed out, rendering what we have."), y())) : y()
         }, globalData.Window.setTimeout(f, 100)))))
     }
     var D = ["debug", "pinMethod", "render", "via", "guid", "pinbox", "quiet", "quality", "noCancel", "noHeader", "force", "here"],
