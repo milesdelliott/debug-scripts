@@ -136,7 +136,8 @@
         }
     }
 
-    function j(c) {
+    function getImage(c) {
+        pinterestLog('getting image')
         var e = void 0,
             f = void 0,
             g = void 0;
@@ -203,7 +204,7 @@
         for (b = N.d.getElementsByTagName("IFRAME"), c = 0; c < b.length; c += 1)
             if (!b[c].getAttribute("nopin") && !b[c].getAttribute("data-pin-nopin") && (d = b[c].getAttribute("src"), d && d.match(/^(https?:|)\/\//))) {
                 if (d = d.split("#")[0].split("?")[0], d.match(N.a.pattern.iframe.youtube)) {
-                    e = d.split("/"), e[4] && (pinterestLog("found a YouTube player: " + b[c].src), j({
+                    e = d.split("/"), e[4] && (pinterestLog("found a YouTube player: " + b[c].src), getImage({
                         src: "https://img.youtube.com/vi/" + e[4] + "/hqdefault.jpg",
                         mod: {
                             multimedia: !0,
@@ -214,7 +215,7 @@
                     continue
                 }
                 if (d.match(N.a.pattern.iframe.instagram)) {
-                    e = d.split("/"), e[4] && (pinterestLog("found an Instagram embed: " + b[c].src), j({
+                    e = d.split("/"), e[4] && (pinterestLog("found an Instagram embed: " + b[c].src), getImage({
                         src: "https://instagram.com/p/" + e[4] + "/media/?size=l",
                         mod: {
                             url: "https://www.instagram.com/p/" + e[4] + "/",
@@ -225,7 +226,7 @@
                 }
                 if (d.match(N.a.pattern.iframe.vimeo)) {
                     e = "https://vimeo.com/api/oembed.json?url=" + encodeURIComponent(b[c].src), f = function(a) {
-                        a.thumbnail_url && j({
+                        a.thumbnail_url && getImage({
                             src: a.thumbnail_url.split("_")[0] + ".jpg",
                             mod: {
                                 multimedia: !0,
@@ -258,19 +259,19 @@
                             description: g(a),
                             sourceOrder: e
                         }, e += 1, b = a.getAttribute("nopin") || a.getAttribute("data-pin-nopin")) return;
-                    if (c = a.parentNode, "A" === c.tagName && c.href && N.v.here.split("/")[2] === c.href.split("/")[2] && (c.href.match(/(^javascript|\.gif|\.jpg|\.jpeg|\.png|\.webp)/) || (d.url = c.href)), b = a.getAttribute("data-pin-me-only"), b && (d.pinMeOnly = !0), b = a.getAttribute("data-pin-id"), b && (d.pinId = b), b = a.getAttribute("data-pin-description"), b && (d.pinDescription = b), b = a.getAttribute("data-pin-url"), b && (d.pinUrl = b), b = a.getAttribute("data-pin-media"), b ? (d.pinMedia = b, j(b === a.currentSrc ? {
+                    if (c = a.parentNode, "A" === c.tagName && c.href && N.v.here.split("/")[2] === c.href.split("/")[2] && (c.href.match(/(^javascript|\.gif|\.jpg|\.jpeg|\.png|\.webp)/) || (d.url = c.href)), b = a.getAttribute("data-pin-me-only"), b && (d.pinMeOnly = !0), b = a.getAttribute("data-pin-id"), b && (d.pinId = b), b = a.getAttribute("data-pin-description"), b && (d.pinDescription = b), b = a.getAttribute("data-pin-url"), b && (d.pinUrl = b), b = a.getAttribute("data-pin-media"), b ? (d.pinMedia = b, getImage(b === a.currentSrc ? {
                             src: a.currentSrc,
                             mod: d
                         } : {
                             src: b,
                             mod: d,
                             update: a.currentSrc
-                        })) : j({
+                        })) : getImage({
                             src: a.currentSrc,
                             mod: d
                         }), N.v.here.match(N.a.pattern.page.twitter) && a.currentSrc.match(N.a.pattern.img.twitter))
                         for (c = a.parentNode; c.tagName;) f = c.getAttribute("data-permalink-path"), f && (d.url = "https://twitter.com" + f, d.description = c.parentNode.getElementsByTagName("P")[0].textContent, c = N.d.body), c = c.parentNode;
-                    a.currentSrc.match(N.a.pattern.img.youtube) && (c = a.currentSrc.split("/vi/"), c.length && (f = c[1].split("/")[0], f && j({
+                    a.currentSrc.match(N.a.pattern.img.youtube) && (c = a.currentSrc.split("/vi/"), c.length && (f = c[1].split("/")[0], f && getImage({
                         mod: {
                             multimedia: !0,
                             url: "https://www.youtube.com/watch?v=" + f
@@ -282,7 +283,7 @@
             };
         if (f = N.d.querySelectorAll("[data-pin-me-only]"), 1 === f.length) h(f[0]);
         else
-            for (N.v.override.og ? pinterestLog("og overridden") : N.v.data.meta.og && (d = {}, pinterestLog("og found"), N.v.data.meta.og.image && ("string" === typeof N.v.data.meta.og.image ? (pinterestLog("og:image found"), d.ogMedia = N.v.data.meta.og.image) : (N.v.data.meta.og.image[0] ? (pinterestLog("og:image array found; using the first element"), q = N.v.data.meta.og.image[0]) : q = N.v.data.meta.og.image, "string" === typeof q ? (pinterestLog("og:image found in object"), d.ogMedia = q) : q.secure_url && "string" === typeof q.secure_url ? (pinterestLog("og:secure_url found"), d.ogMedia = q.secure_url) : q["~"] && "string" === typeof q["~"] && (pinterestLog("og:~ found"), d.ogMedia = q["~"])), N.v.data.meta.og.url && ("string" === typeof N.v.data.meta.og.url ? d.ogUrl = N.v.data.meta.og.url : (pinterestLog("More than one og:url found"), d.ogUrl = N.v.data.meta.og.url[0]), pinterestLog("og:url found")), N.v.data.meta.og.site_name && ("string" === typeof N.v.data.meta.og.site_name ? N.v.ogSiteName = N.v.data.meta.og.site_name : (pinterestLog("More than one og:site_name found"), N.v.ogSiteName = N.v.data.meta.og.site_name[0])), (N.v.data.meta.og.description || N.v.data.meta.og.title) && (pinterestLog("og:title or og:description found"), d.ogDescription = N.v.data.meta.og.description || N.v.data.meta.og.title, "string" === typeof d.ogDescription ? N.v.ogDescription = d.ogDescription : (pinterestLog("More than one og:description found"), N.v.ogDescription = d.ogDescription[0])), pinterestLog("loading og:image"), j({
+            for (N.v.override.og ? pinterestLog("og overridden") : N.v.data.meta.og && (d = {}, pinterestLog("og found"), N.v.data.meta.og.image && ("string" === typeof N.v.data.meta.og.image ? (pinterestLog("og:image found"), d.ogMedia = N.v.data.meta.og.image) : (N.v.data.meta.og.image[0] ? (pinterestLog("og:image array found; using the first element"), q = N.v.data.meta.og.image[0]) : q = N.v.data.meta.og.image, "string" === typeof q ? (pinterestLog("og:image found in object"), d.ogMedia = q) : q.secure_url && "string" === typeof q.secure_url ? (pinterestLog("og:secure_url found"), d.ogMedia = q.secure_url) : q["~"] && "string" === typeof q["~"] && (pinterestLog("og:~ found"), d.ogMedia = q["~"])), N.v.data.meta.og.url && ("string" === typeof N.v.data.meta.og.url ? d.ogUrl = N.v.data.meta.og.url : (pinterestLog("More than one og:url found"), d.ogUrl = N.v.data.meta.og.url[0]), pinterestLog("og:url found")), N.v.data.meta.og.site_name && ("string" === typeof N.v.data.meta.og.site_name ? N.v.ogSiteName = N.v.data.meta.og.site_name : (pinterestLog("More than one og:site_name found"), N.v.ogSiteName = N.v.data.meta.og.site_name[0])), (N.v.data.meta.og.description || N.v.data.meta.og.title) && (pinterestLog("og:title or og:description found"), d.ogDescription = N.v.data.meta.og.description || N.v.data.meta.og.title, "string" === typeof d.ogDescription ? N.v.ogDescription = d.ogDescription : (pinterestLog("More than one og:description found"), N.v.ogDescription = d.ogDescription[0])), pinterestLog("loading og:image"), getImage({
                     src: d.ogMedia,
                     mod: d
                 }))), c = N.d.getElementsByTagName("IMG"), b = 0; b < c.length; b += 1) h(c[b])
@@ -329,7 +330,7 @@
         if (b = function(a, c, d) {
                 for (var e in a) "object" === O(a[e]) ? "string" === typeof a[e][0] ? c[d] = a[e] : b(a[e], a, e) : 1 === Object.keys(a).length && (c[d] = a[e]);
                 return a
-            }, N.v.data.meta = b(e, null, null), c = {}, pinterestLog("meta data found"), pinterestLog(N.v.data.meta), N.v.data.meta.pin && (pinterestLog("data-pin found"), N.v.data.meta.pin.url && (pinterestLog("data-pin-url found"), c.pinUrl = N.v.data.meta.pin.url, N.v.override.link = !0), N.v.data.meta.pin.description && (pinterestLog("data-pin-description found"), c.pinDescription = N.v.data.meta.pin.description), N.v.data.meta.pin.title && (pinterestLog("data-pin-title found"), c.pinTitle = N.v.data.meta.pin.title), N.v.data.meta.pin.id && (pinterestLog("data-pin-id found"), c.pinId = N.v.data.meta.pin.id, N.v.override.imageless = !0), N.v.data.meta.pin.media && (pinterestLog("data-pin-media found"), c.pinMedia = N.v.data.meta.pin.media, pinterestLog("loading data-pin-media"), j({
+            }, N.v.data.meta = b(e, null, null), c = {}, pinterestLog("meta data found"), pinterestLog(N.v.data.meta), N.v.data.meta.pin && (pinterestLog("data-pin found"), N.v.data.meta.pin.url && (pinterestLog("data-pin-url found"), c.pinUrl = N.v.data.meta.pin.url, N.v.override.link = !0), N.v.data.meta.pin.description && (pinterestLog("data-pin-description found"), c.pinDescription = N.v.data.meta.pin.description), N.v.data.meta.pin.title && (pinterestLog("data-pin-title found"), c.pinTitle = N.v.data.meta.pin.title), N.v.data.meta.pin.id && (pinterestLog("data-pin-id found"), c.pinId = N.v.data.meta.pin.id, N.v.override.imageless = !0), N.v.data.meta.pin.media && (pinterestLog("data-pin-media found"), c.pinMedia = N.v.data.meta.pin.media, pinterestLog("loading data-pin-media"), getImage({
                 src: N.v.data.meta.pin.media,
                 mod: c
             }))), N.v.data.meta.instapp && N.v.data.meta.instapp.owner_user_id && N.v.data.meta.al && N.v.data.meta.al.ios && N.v.data.meta.al.ios.url && N.v.data.meta.al.ios.url.match("=") && (N.v.insta = {
@@ -369,7 +370,7 @@
         if (c = !1, !c && N.v.here.match(N.a.pattern.page.amazonPage))
             for (b = N.d.getElementsByTagName("IMG"), e = 0; e < b.length; e += 1)
                 if (f = b[e].getAttribute(N.a.pattern.att.amazonAsin), f && N.v.here.match(f)) {
-                    j({
+                    getImage({
                         src: b[e].currentSrc,
                         override: ["imageless"],
                         mod: {
@@ -379,7 +380,7 @@
                     }), c = !0;
                     break
                 }
-        if (!c && N.v.here.match(N.a.pattern.page.amazonProduct) && (b = N.d.getElementById("imgTagWrapperId"), b && (d = b.getElementsByTagName("IMG")[0], d && (j({
+        if (!c && N.v.here.match(N.a.pattern.page.amazonProduct) && (b = N.d.getElementById("imgTagWrapperId"), b && (d = b.getElementsByTagName("IMG")[0], d && (getImage({
                 src: d.src,
                 override: ["imageless"],
                 mod: {
@@ -393,7 +394,7 @@
                 pinterestLog("On an Instagram photo URL");
                 var s = function(a) {
                         if (e = a.getElementsByTagName("IMG"), e.length)
-                            for (b = 0; b < e.length; b += 1) j({
+                            for (b = 0; b < e.length; b += 1) getImage({
                                 src: e[b].currentSrc,
                                 override: ["imageless"],
                                 mod: {
@@ -408,7 +409,7 @@
                     u.length && (s(u[1]), pinterestLog(c ? "Found image in button." : "Found button but no image."))
                 }
             } else
-                for (pinterestLog("On a non-photo Instagram page"), b = N.d.getElementsByTagName("IMG"), f = 0; f < b.length; f += 1) b[f].currentSrc && (e = b[f].parentNode.parentNode.parentNode, "A" === e.tagName && e.href && e.href.match(/^https?:\/\//) && j({
+                for (pinterestLog("On a non-photo Instagram page"), b = N.d.getElementsByTagName("IMG"), f = 0; f < b.length; f += 1) b[f].currentSrc && (e = b[f].parentNode.parentNode.parentNode, "A" === e.tagName && e.href && e.href.match(/^https?:\/\//) && getImage({
                     src: b[f].currentSrc,
                     override: ["imageless"],
                     mod: {
@@ -417,7 +418,7 @@
                     }
                 }))
         }
-        if (!c && N.v.here.match(N.a.pattern.page.youtubeWatch) && (d = N.v.here.split("v=")[1].split("&")[0].split("#")[0], d && (pinterestLog("found a YouTube page: " + N.v.here), j({
+        if (!c && N.v.here.match(N.a.pattern.page.youtubeWatch) && (d = N.v.here.split("v=")[1].split("&")[0].split("#")[0], d && (pinterestLog("found a YouTube page: " + N.v.here), getImage({
                 src: "https://img.youtube.com/vi/" + d + "/hqdefault.jpg",
                 override: ["imageless"],
                 mod: {
@@ -426,7 +427,7 @@
                     url: "https://www.youtube.com/watch?v=" + d
                 }
             }), c = !0)), !c && N.v.here.match(N.a.pattern.page.youtubeMobile))
-            for (b = N.d.getElementsByTagName("A"), f = 0; f < b.length; f += 1) b[f].href && b[f].href.match(N.a.pattern.link.youtubeWatch) && (d = b[f].href.split("v=")[1].split("&")[0].split("#")[0], d && (pinterestLog("found a YouTube video: " + b[f].href), j({
+            for (b = N.d.getElementsByTagName("A"), f = 0; f < b.length; f += 1) b[f].href && b[f].href.match(N.a.pattern.link.youtubeWatch) && (d = b[f].href.split("v=")[1].split("&")[0].split("#")[0], d && (pinterestLog("found a YouTube video: " + b[f].href), getImage({
                 src: "https://img.youtube.com/vi/" + d + "/hqdefault.jpg",
                 override: ["imageless"],
                 mod: {
@@ -459,7 +460,7 @@
                     } catch (e) {
                         i.mod.description = d[2].textContent, pinterestLog("Could not run JSON.parse on " + d[2].textContent)
                     }
-                    j(i), c = !0
+                    getImage(i), c = !0
                 }
             };
             if (q = N.d.querySelectorAll("[data-pin-me-only]"), 1 === q.length && q[0].parentNode && "A" === q[0].parentNode.tagName) v(q[0].parentNode);
