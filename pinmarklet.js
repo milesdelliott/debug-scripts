@@ -118,11 +118,12 @@
         })), b || (b = c(a.title)), b || (b = c(globalData.document.title))) : (b || (b = c(globalData.pinterestSettings.data.meta.description || globalData.pinterestSettings.data.meta.title)), b || (b = c(globalData.pinterestSettings.ogDescription)), b || (b = c(globalData.document.title), !b && a.imageless && (b = globalData.pinterestSettings.here.split("/").pop().split("#")[0].split("?")[0].split(".")[0])))), b
     }
 
-    function h(a) {
+    function checkImageDimensions(a) {
         return a.width < 90 || a.height < 90 ? "Image dimensions are both too small." : a.width < 120 && a.height < 120 ? "One image dimension is too small." : a.width > 3 * a.height ? "Image is too wide." : a.src.match(/^https?:\/\//) ? !1 : "Image source does not begin with http."
     }
 
-    function i(a) {
+    function getLoadedImageAtts(a) {
+        console.log('Image has loaded', a)
         return {
             status: "loaded",
             height: a.naturalHeight || 0,
@@ -131,51 +132,52 @@
         }
     }
 
-    function getImage(c) {
+    function getImage(image) {
         console.log('getting image')
-        var e = void 0,
+        var imageObj = void 0,
             f = void 0,
             g = void 0;
-        if (c.src && !d({
-                url: c.src
+        if (image.src && !d({
+                url: image.src
             }) && (g = b({
-                str: c.src
+                str: image.src
             }), !globalData.pinterestSettings.data.img[g])) {
-            if (f = c.src.split("#")[0].split("?")[0].split(".").pop(), "svg" === f) return void(globalData.pinterestSettings.data.img[g] = {
-                src: c.src,
+            if (f = image.src.split("#")[0].split("?")[0].split(".").pop(), "svg" === f) return void(globalData.pinterestSettings.data.img[g] = {
+                src: image.src,
                 status: "invalid",
                 reason: "SVG images are not supported on Pinterest"
             });
-            e = new Image, globalData.pinterestSettings.count.imgLoading = globalData.pinterestSettings.count.imgLoading + 1, globalData.pinterestSettings.data.img[g] = {
-                mod: c.mod || {},
+            imageObj = new Image, globalData.pinterestSettings.count.imgLoading = globalData.pinterestSettings.count.imgLoading + 1, globalData.pinterestSettings.data.img[g] = {
+                mod: image.mod || {},
                 status: "loading"
-            }, e.onerror = function(a) {
+            }, imageObj.onerror = function(a) {
+                console.log('Error with image', a, imageObj)
                 var b = void 0;
                 globalData.pinterestSettings.count.imgLoading = globalData.pinterestSettings.count.imgLoading - 1;
-                for (b in globalData.pinterestSettings.data.img) globalData.pinterestSettings.data.img[b].mod && globalData.pinterestSettings.data.img[b].mod.pinMedia === c.src && delete globalData.pinterestSettings.data.img[b].mod.pinMedia;
+                for (b in globalData.pinterestSettings.data.img) globalData.pinterestSettings.data.img[b].mod && globalData.pinterestSettings.data.img[b].mod.pinMedia === image.src && delete globalData.pinterestSettings.data.img[b].mod.pinMedia;
                 globalData.pinterestSettings.data.img[g].status = "error"
-            }, e.onload = function() {
-                console.log('e.onload thing')
+            }, imageObj.onload = function() {
+                console.log('Image running load in', imageObj)
                 var d = void 0,
                     f = void 0,
-                    j = i(e),
-                    k = h(j);
-                if (c.override)
-                    for (d = 0; d < c.override.length; d += 1) globalData.pinterestSettings.override[c.override[d]] = !0;
-                if (k) globalData.pinterestSettings.data.img[g] = {
+                    imageAtts = getLoadedImageAtts(imageObj),
+                    imageDimensionsBad = checkImageDimensions(imageAtts);
+                if (image.override)
+                    for (d = 0; d < image.override.length; d += 1) globalData.pinterestSettings.override[image.override[d]] = !0;
+                if (imageDimensionsBad) globalData.pinterestSettings.data.img[g] = {
                     status: "filtered",
-                    reason: k,
-                    src: c.src.substr(0, 64)
-                }, c.src.length > 64 && (globalData.pinterestSettings.data.img[g].src = globalData.pinterestSettings.data.img[g].src + "...");
+                    reason: imageDimensionsBad,
+                    src: image.src.substr(0, 64)
+                }, image.src.length > 64 && (globalData.pinterestSettings.data.img[g].src = globalData.pinterestSettings.data.img[g].src + "...");
                 else {
-                    j.height > globalData.otherSettings.thumbSize && j.width > globalData.otherSettings.thumbSize && (globalData.pinterestSettings.override.imageless = !0), c.mod && (globalData.pinterestSettings.data.img[g].mod = c.mod);
-                    for (d in j) j[d] && (globalData.pinterestSettings.data.img[g][d] = j[d]);
-                    c.src === globalData.pinterestSettings.here && (d.description = "", globalData.pinterestSettings.override.imageless = !0), c.update ? (console.log("Image source changed from " + c.update + " to " + c.src), f = b({
-                        str: c.update
-                    }), globalData.pinterestSettings.data.img[f] = globalData.pinterestSettings.data.img[g], c.mod && (globalData.pinterestSettings.data.img[f].mod = c.mod), globalData.pinterestSettings.data.img[f].src = c.src, globalData.pinterestSettings.data.img[f].height = j.height, globalData.pinterestSettings.data.img[f].width = j.width, globalData.pinterestSettings.data.img[g] = globalData.pinterestSettings.data.img[f], globalData.pinterestSettings.data.img[g].status = "ok", delete globalData.pinterestSettings.data.img[f]) : globalData.pinterestSettings.data.img[g].status = "ok"
+                    imageAtts.height > globalData.otherSettings.thumbSize && imageAtts.width > globalData.otherSettings.thumbSize && (globalData.pinterestSettings.override.imageless = !0), image.mod && (globalData.pinterestSettings.data.img[g].mod = image.mod);
+                    for (d in imageAtts) imageAtts[d] && (globalData.pinterestSettings.data.img[g][d] = imageAtts[d]);
+                    image.src === globalData.pinterestSettings.here && (d.description = "", globalData.pinterestSettings.override.imageless = !0), image.update ? (console.log("Image source changed from " + image.update + " to " + image.src), f = b({
+                        str: image.update
+                    }), globalData.pinterestSettings.data.img[f] = globalData.pinterestSettings.data.img[g], image.mod && (globalData.pinterestSettings.data.img[f].mod = image.mod), globalData.pinterestSettings.data.img[f].src = image.src, globalData.pinterestSettings.data.img[f].height = imageAtts.height, globalData.pinterestSettings.data.img[f].width = imageAtts.width, globalData.pinterestSettings.data.img[g] = globalData.pinterestSettings.data.img[f], globalData.pinterestSettings.data.img[g].status = "ok", delete globalData.pinterestSettings.data.img[f]) : globalData.pinterestSettings.data.img[g].status = "ok"
                 }
                 globalData.pinterestSettings.count.imgLoading = globalData.pinterestSettings.count.imgLoading - 1
-            }, e.src = c.src
+            }, imageObj.src = image.src
         }
     }
 
